@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AXIS — Design & Engenharia 3D</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23003d99'/%3E%3Cstop offset='100%25' stop-color='%2333aaff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='26' y='2' width='12' height='60' rx='6' transform='rotate(45 32 32)' fill='url(%23a)'/%3E%3Crect x='26' y='2' width='12' height='60' rx='6' transform='rotate(-45 32 32)' fill='url(%23a)'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- GOOGLE ANALYTICS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XKXJXV0785"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XKXJXV0785');
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+--bg-main: #0a0a0f;
+--bg-panel: #12121a;
+--bg-card: rgba(255, 255, 255, 0.03);
+--bg-glass: rgba(255, 255, 255, 0.05);
+--border-subtle: rgba(255, 255, 255, 0.1);
+--text-main: #ffffff;
+--text-muted: #8b8b9e;
+--text-dim: #55556a;
+--accent-primary: #6366f1;
+--accent-secondary: #8b5cf6;
+--accent-tertiary: #06b6d4;
+--accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+--accent-glow: rgba(99, 102, 241, 0.4);
+--header-bg: rgba(10, 10, 15, 0.8);
+--font-display: 'Space Grotesk', sans-serif;
+--font-body: 'Inter', -apple-system, system-ui, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+background: var(--bg-main);
+color: var(--text-main);
+font-family: var(--font-body);
+line-height: 1.6;
+overflow-x: hidden;
+}
+
+/* ========== ANIMATED BACKGROUND ========== */
+.bg-animation {
+position: fixed;
+inset: 0;
+z-index: -1;
+overflow: hidden;
+}
+
+.bg-orb {
+position: absolute;
+border-radius: 50%;
+filter: blur(80px);
+opacity: 0.5;
+animation: float 20s ease-in-out infinite;
+}
+
+.bg-orb-1 {
+width: 600px;
+height: 600px;
+background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+top: -200px;
+right: -100px;
+animation-delay: 0s;
+}
+
+.bg-orb-2 {
+width: 400px;
+height: 400px;
+background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
+bottom: -150px;
+left: -100px;
+animation-delay: -7s;
+}
+
+.bg-orb-3 {
+width: 300px;
+height: 300px;
+background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+top: 50%;
+left: 50%;
+animation-delay: -14s;
+}
+
+@keyframes float {
+0%, 100% { transform: translate(0, 0) scale(1); }
+25% { transform: translate(50px, -50px) scale(1.1); }
+50% { transform: translate(-30px, 30px) scale(0.95); }
+75% { transform: translate(40px, 20px) scale(1.05); }
+}
+
+/* Grid overlay */
+body::before {
+content: "";
+position: fixed;
+inset: 0;
+background-image:
+linear-gradient(var(--border-subtle) 1px, transparent 1px),
+linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+background-size: 80px 80px;
+z-index: -1;
+pointer-events: none;
+opacity: 0.4;
+}
+
+/* ========== REVEAL ANIMATIONS ========== */
+.reveal {
+opacity: 0;
+transform: translateY(60px);
+transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+opacity: 1;
+transform: translateY(0);
+}
+
+.reveal-left {
+opacity: 0;
+transform: translateX(-60px);
+transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-left.active {
+opacity: 1;
+transform: translateX(0);
+}
+
+.reveal-right {
+opacity: 0;
+transform: translateX(60px);
+transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-right.active {
+opacity: 1;
+transform: translateX(0);
+}
+
+.reveal-scale {
+opacity: 0;
+transform: scale(0.8);
+transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-scale.active {
+opacity: 1;
+transform: scale(1);
+}
+
+.container { max-width: 1400px; margin: 0 auto; padding: 0 60px; }
+
+h1, h2, h3 {
+font-family: var(--font-display);
+font-weight: 700;
+letter-spacing: -0.04em;
+line-height: 1.1;
+color: var(--text-main);
+}
+
+.section-tag {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(--accent-primary);
+margin-bottom: 20px;
+padding: 10px 20px;
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+border-radius: 100px;
+backdrop-filter: blur(10px);
+}
+
+.section-tag::before {
+content: "";
+width: 8px;
+height: 8px;
+background: var(--accent-gradient);
+border-radius: 50%;
+animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+0%, 100% { transform: scale(1); opacity: 1; }
+50% { transform: scale(1.5); opacity: 0.5; }
+}
+
+/* ========== HEADER ========== */
+header {
+position: fixed;
+top: 0;
+width: 100%;
+height: 80px;
+background: var(--header-bg);
+backdrop-filter: blur(20px);
+border-bottom: 1px solid var(--border-subtle);
+z-index: 1000;
+transition: all 0.3s ease;
+}
+
+header.scrolled {
+height: 60px;
+background: rgba(10, 10, 15, 0.95);
+}
+
+.header-inner {
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.brand-logo {
+display: flex;
+align-items: center;
+height: 72px;
+text-decoration: none;
+}
+
+.brand-logo img {
+height: 100%;
+width: auto;
+object-fit: contain;
+}
+
+nav { display: flex; gap: 8px; }
+
+nav a {
+font-size: 12px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--text-muted);
+text-decoration: none;
+font-weight: 600;
+padding: 10px 20px;
+border-radius: 8px;
+transition: all 0.3s ease;
+position: relative;
+}
+
+nav a::after {
+content: "";
+position: absolute;
+bottom: 6px;
+left: 50%;
+transform: translateX(-50%);
+width: 0;
+height: 2px;
+background: var(--accent-gradient);
+border-radius: 2px;
+transition: width 0.3s ease;
+}
+
+nav a:hover {
+color: var(--text-main);
+background: var(--bg-glass);
+}
+
+nav a:hover::after,
+nav a.active::after {
+width: 30px;
+}
+
+nav a.active {
+color: var(--text-main);
+}
+
+.header-controls {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.control-btn {
+width: 44px;
+height: 44px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+color: var(--text-muted);
+font-size: 14px;
+cursor: pointer;
+border-radius: 12px;
+transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+color: var(--text-main);
+background: var(--bg-card);
+transform: translateY(-2px);
+}
+
+.btn-premium {
+background: var(--accent-gradient);
+color: #fff;
+padding: 14px 32px;
+font-size: 12px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+text-decoration: none;
+border-radius: 12px;
+transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+border: none;
+cursor: pointer;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+white-space: nowrap;
+position: relative;
+overflow: hidden;
+}
+
+.btn-premium::before {
+content: "";
+position: absolute;
+inset: 0;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+transform: translateX(-100%);
+transition: transform 0.5s;
+}
+
+.btn-premium:hover::before {
+transform: translateX(100%);
+}
+
+.btn-premium:hover {
+transform: translateY(-3px);
+box-shadow: 0 20px 40px var(--accent-glow);
+}
+
+.hamburger {
+display: none;
+align-items: center;
+justify-content: center;
+width: 44px;
+height: 44px;
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+color: var(--text-main);
+font-size: 18px;
+cursor: pointer;
+padding: 0;
+border-radius: 12px;
+transition: all 0.3s ease;
+line-height: 1;
+}
+
+/* ========== MOBILE MENU ========== */
+.mobile-menu {
+display: none;
+position: fixed;
+inset: 0;
+background: var(--bg-main);
+z-index: 999;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 24px;
+opacity: 0;
+transition: opacity 0.4s ease;
+}
+
+.mobile-menu.open {
+display: flex;
+opacity: 1;
+}
+
+.mobile-menu a {
+font-size: 18px;
+font-weight: 600;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+color: var(--text-muted);
+text-decoration: none;
+padding: 12px 24px;
+border-radius: 8px;
+transition: all 0.3s ease;
+}
+
+.mobile-menu a:hover {
+color: var(--accent-primary);
+background: var(--bg-glass);
+}
+
+.mobile-menu-close {
+position: absolute;
+top: 24px;
+right: 24px;
+width: 50px;
+height: 50px;
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+color: var(--text-muted);
+font-size: 24px;
+cursor: pointer;
+border-radius: 12px;
+transition: all 0.3s ease;
+}
+
+/* ========== HERO ========== */
+.hero {
+min-height: 100vh;
+display: flex;
+align-items: center;
+padding: 120px 0 80px;
+position: relative;
+}
+
+.hero-content {
+max-width: 900px;
+}
+
+.hero-badge {
+display: inline-flex;
+align-items: center;
+gap: 12px;
+padding: 12px 24px;
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+border-radius: 100px;
+margin-bottom: 32px;
+font-size: 13px;
+color: var(--text-muted);
+backdrop-filter: blur(10px);
+animation: slideDown 1s ease-out;
+}
+
+.hero-badge-dot {
+width: 10px;
+height: 10px;
+background: #22c55e;
+border-radius: 50%;
+animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.4; }
+}
+
+@keyframes slideDown {
+from { opacity: 0; transform: translateY(-30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.hero h1 {
+font-size: clamp(48px, 8vw, 96px);
+margin-bottom: 24px;
+animation: slideUp 1s ease-out 0.2s both;
+}
+
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(40px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.hero h1 span {
+background: var(--accent-gradient);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+.hero-desc {
+color: var(--text-muted);
+font-size: 20px;
+max-width: 600px;
+line-height: 1.7;
+margin-bottom: 48px;
+animation: slideUp 1s ease-out 0.4s both;
+}
+
+.hero-actions {
+display: flex;
+gap: 16px;
+flex-wrap: wrap;
+animation: slideUp 1s ease-out 0.6s both;
+}
+
+.btn-outline {
+border: 2px solid var(--border-subtle);
+color: var(--text-main);
+padding: 16px 32px;
+font-size: 12px;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+text-decoration: none;
+font-weight: 700;
+border-radius: 12px;
+transition: all 0.3s ease;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+background: transparent;
+}
+
+.btn-outline:hover {
+border-color: var(--accent-primary);
+color: var(--accent-primary);
+background: var(--bg-glass);
+transform: translateY(-3px);
+}
+
+.section {
+padding: 120px 0;
+position: relative;
+}
+
+/* ========== STATS BAR ========== */
+.stats-bar {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 40px;
+padding: 60px 0;
+border-top: 1px solid var(--border-subtle);
+border-bottom: 1px solid var(--border-subtle);
+margin-top: 80px;
+}
+
+.stat-item {
+text-align: center;
+position: relative;
+}
+
+.stat-item::after {
+content: "";
+position: absolute;
+right: -20px;
+top: 50%;
+transform: translateY(-50%);
+width: 1px;
+height: 40px;
+background: var(--border-subtle);
+}
+
+.stat-item:last-child::after {
+display: none;
+}
+
+.stat-number {
+font-family: var(--font-display);
+font-size: 48px;
+font-weight: 700;
+background: var(--accent-gradient);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+line-height: 1;
+margin-bottom: 8px;
+}
+
+.stat-label {
+font-size: 12px;
+color: var(--text-dim);
+text-transform: uppercase;
+letter-spacing: 0.15em;
+}
+
+/* ========== SERVICES ========== */
+.services-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 32px;
+margin-top: 60px;
+}
+
+.service-card {
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+padding: 48px;
+border-radius: 24px;
+transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+position: relative;
+overflow: hidden;
+}
+
+.service-card::before {
+content: "";
+position: absolute;
+inset: 0;
+background: var(--accent-gradient);
+opacity: 0;
+transition: opacity 0.5s ease;
+}
+
+.service-card:hover {
+transform: translateY(-10px);
+border-color: var(--accent-primary);
+box-shadow: 0 40px 80px rgba(99, 102, 241, 0.15);
+}
+
+.service-card:hover::before {
+opacity: 0.05;
+}
+
+.service-icon {
+width: 80px;
+height: 80px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: var(--accent-gradient);
+border-radius: 20px;
+margin-bottom: 32px;
+font-size: 32px;
+color: #fff;
+transition: transform 0.5s ease;
+}
+
+.service-card:hover .service-icon {
+transform: scale(1.1) rotate(5deg);
+}
+
+.service-card h3 {
+font-size: 28px;
+margin-bottom: 16px;
+font-family: var(--font-display);
+}
+
+.service-card p {
+color: var(--text-muted);
+font-size: 15px;
+margin-bottom: 32px;
+line-height: 1.8;
+position: relative;
+z-index: 1;
+}
+
+.service-features {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-bottom: 32px;
+}
+
+.service-feature {
+font-size: 11px;
+padding: 8px 16px;
+background: var(--bg-card);
+border: 1px solid var(--border-subtle);
+border-radius: 100px;
+color: var(--text-muted);
+}
+
+.start-project-btn {
+color: var(--accent-primary);
+font-weight: 700;
+text-decoration: none;
+font-size: 13px;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+background: none;
+border: none;
+cursor: pointer;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+padding: 0;
+transition: all 0.3s ease;
+position: relative;
+z-index: 1;
+}
+
+.start-project-btn i {
+transition: transform 0.3s ease;
+}
+
+.start-project-btn:hover {
+color: var(--text-main);
+}
+
+.start-project-btn:hover i {
+transform: translateX(5px);
+}
+
+/* ========== PROCESS ========== */
+.process-grid {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 0;
+margin-top: 60px;
+position: relative;
+}
+
+.process-grid::before {
+content: "";
+position: absolute;
+top: 50px;
+left: 10%;
+right: 10%;
+height: 2px;
+background: var(--accent-gradient);
+opacity: 0.3;
+}
+
+.process-step {
+text-align: center;
+padding: 40px 24px;
+position: relative;
+}
+
+.step-number {
+width: 100px;
+height: 100px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: var(--bg-glass);
+border: 2px solid var(--border-subtle);
+border-radius: 50%;
+margin: 0 auto 24px;
+font-family: var(--font-display);
+font-size: 32px;
+font-weight: 700;
+background: var(--accent-gradient);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+transition: all 0.5s ease;
+}
+
+.process-step:hover .step-number {
+transform: scale(1.1);
+box-shadow: 0 20px 40px var(--accent-glow);
+}
+
+.process-step h3 {
+font-size: 18px;
+margin-bottom: 12px;
+font-family: var(--font-display);
+}
+
+.process-step p {
+font-size: 13px;
+color: var(--text-muted);
+line-height: 1.6;
+}
+
+/* ========== TECH STACK ========== */
+.tech-section {
+padding: 80px 0;
+background: var(--bg-glass);
+border-top: 1px solid var(--border-subtle);
+border-bottom: 1px solid var(--border-subtle);
+}
+
+.tech-grid {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 60px;
+flex-wrap: wrap;
+}
+
+.tech-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 12px;
+opacity: 0.6;
+transition: all 0.3s ease;
+}
+
+.tech-item:hover {
+opacity: 1;
+transform: translateY(-5px);
+}
+
+.tech-icon {
+width: 60px;
+height: 60px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 32px;
+color: var(--text-muted);
+}
+
+.tech-name {
+font-size: 12px;
+color: var(--text-dim);
+text-transform: uppercase;
+letter-spacing: 0.1em;
+}
+
+/* ========== ABOUT ========== */
+.about-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+align-items: center;
+margin-top: 60px;
+}
+
+.about-text p {
+font-size: 18px;
+color: var(--text-muted);
+line-height: 1.9;
+margin-bottom: 24px;
+}
+
+.about-visual {
+position: relative;
+}
+
+.about-card {
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+border-radius: 24px;
+padding: 40px;
+position: relative;
+overflow: hidden;
+}
+
+.about-card::before {
+content: "";
+position: absolute;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background: conic-gradient(from 0deg, transparent, var(--accent-primary), transparent 30%);
+animation: rotate 4s linear infinite;
+opacity: 0.1;
+}
+
+@keyframes rotate {
+100% { transform: rotate(360deg); }
+}
+
+.about-quote {
+font-size: 24px;
+font-family: var(--font-display);
+font-weight: 600;
+line-height: 1.5;
+margin-bottom: 24px;
+position: relative;
+z-index: 1;
+}
+
+.about-author {
+display: flex;
+align-items: center;
+gap: 16px;
+position: relative;
+z-index: 1;
+}
+
+.about-avatar {
+width: 48px;
+height: 48px;
+background: var(--accent-gradient);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+color: #fff;
+}
+
+.about-name {
+font-weight: 600;
+}
+
+.about-role {
+font-size: 13px;
+color: var(--text-dim);
+}
+
+/* ========== REVIEWS ========== */
+.reviews-container {
+max-width: 900px;
+margin: 60px auto 0;
+}
+
+.review-card {
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+border-radius: 24px;
+padding: 48px;
+}
+
+.review-form-header {
+text-align: center;
+margin-bottom: 40px;
+}
+
+.stars-input {
+display: flex;
+gap: 12px;
+justify-content: center;
+margin-bottom: 16px;
+}
+
+.star-btn {
+font-size: 28px;
+color: var(--text-dim);
+cursor: pointer;
+transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.star-btn:hover {
+transform: scale(1.2);
+}
+
+.star-btn.active {
+color: #fbbf24;
+transform: scale(1.1);
+}
+
+.review-textarea {
+width: 100%;
+background: var(--bg-card);
+border: 1px solid var(--border-subtle);
+border-radius: 16px;
+padding: 20px;
+color: var(--text-main);
+font-family: inherit;
+font-size: 15px;
+resize: none;
+min-height: 120px;
+margin-bottom: 20px;
+transition: all 0.3s ease;
+}
+
+.review-textarea:focus {
+outline: none;
+border-color: var(--accent-primary);
+box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.existing-reviews {
+margin-top: 48px;
+padding-top: 32px;
+border-top: 1px solid var(--border-subtle);
+}
+
+.review-item {
+padding: 24px 0;
+border-bottom: 1px solid var(--border-subtle);
+}
+
+.review-item:last-child {
+border-bottom: none;
+}
+
+.review-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 12px;
+}
+
+.review-stars {
+display: flex;
+gap: 4px;
+color: #fbbf24;
+font-size: 14px;
+}
+
+.review-date {
+font-size: 12px;
+color: var(--text-dim);
+}
+
+.review-project {
+display: inline-block;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--accent-primary);
+background: var(--bg-glass);
+padding: 6px 12px;
+border-radius: 6px;
+margin-bottom: 8px;
+}
+
+.review-text {
+color: var(--text-muted);
+line-height: 1.8;
+}
+
+/* ========== CONTACT ========== */
+.contact-section {
+padding: 120px 0;
+background: var(--bg-panel);
+position: relative;
+overflow: hidden;
+}
+
+.contact-section::before {
+content: "";
+position: absolute;
+top: -50%;
+right: -20%;
+width: 600px;
+height: 600px;
+background: var(--accent-gradient);
+opacity: 0.05;
+border-radius: 50%;
+filter: blur(100px);
+}
+
+.contact-grid {
+display: grid;
+grid-template-columns: 1fr 1.2fr;
+gap: 80px;
+}
+
+.contact-info h2 {
+font-size: 48px;
+margin-bottom: 24px;
+font-family: var(--font-display);
+}
+
+.contact-info p {
+color: var(--text-muted);
+font-size: 18px;
+line-height: 1.8;
+margin-bottom: 40px;
+}
+
+.contact-details {
+display: flex;
+flex-direction: column;
+gap: 24px;
+}
+
+.contact-detail {
+display: flex;
+align-items: center;
+gap: 16px;
+}
+
+.contact-detail-icon {
+width: 48px;
+height: 48px;
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: var(--accent-primary);
+font-size: 18px;
+}
+
+.contact-detail-text {
+font-size: 15px;
+color: var(--text-muted);
+}
+
+.contact-form {
+background: var(--bg-glass);
+border: 1px solid var(--border-subtle);
+border-radius: 24px;
+padding: 48px;
+}
+
+.form-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 20px;
+margin-bottom: 20px;
+}
+
+.form-group {
+margin-bottom: 20px;
+}
+
+.form-group label {
+display: block;
+font-size: 12px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+color: var(--text-dim);
+margin-bottom: 10px;
+}
+
+.form-input {
+width: 100%;
+background: var(--bg-card);
+border: 1px solid var(--border-subtle);
+border-radius: 12px;
+padding: 16px 20px;
+color: var(--text-main);
+font-family: inherit;
+font-size: 15px;
+transition: all 0.3s ease;
+}
+
+.form-input:focus {
+outline: none;
+border-color: var(--accent-primary);
+box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.form-textarea {
+min-height: 140px;
+resize: none;
+}
+
+.form-file {
+padding: 14px 20px;
+cursor: pointer;
+}
+
+.form-file::file-selector-button {
+background: var(--accent-gradient);
+color: #fff;
+border: none;
+padding: 8px 16px;
+border-radius: 8px;
+font-size: 12px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+cursor: pointer;
+margin-right: 14px;
+transition: opacity 0.3s ease;
+}
+
+.form-file::file-selector-button:hover {
+opacity: 0.85;
+}
+
+.form-file-hint {
+display: block;
+font-size: 12px;
+color: var(--text-dim);
+margin-top: 8px;
+}
+
+/* ========== FOOTER ========== */
+footer {
+padding: 60px 0;
+border-top: 1px solid var(--border-subtle);
+}
+
+.footer-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.footer-brand {
+display: flex;
+align-items: center;
+gap: 16px;
+}
+
+.footer-text {
+color: var(--text-dim);
+font-size: 13px;
+}
+
+.footer-links {
+display: flex;
+gap: 32px;
+}
+
+.footer-links a {
+color: var(--text-muted);
+text-decoration: none;
+font-size: 13px;
+transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+color: var(--accent-primary);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+.container { padding: 0 40px; }
+
+.services-grid { grid-template-columns: 1fr; }
+
+.process-grid {
+grid-template-columns: repeat(3, 1fr);
+}
+
+.process-grid::before { display: none; }
+
+.process-step:nth-child(4),
+.process-step:nth-child(5) {
+display: none;
+}
+
+.about-grid {
+grid-template-columns: 1fr;
+gap: 40px;
+}
+
+.contact-grid {
+grid-template-columns: 1fr;
+gap: 40px;
+}
+
+.stats-bar {
+grid-template-columns: repeat(2, 1fr);
+gap: 32px;
+}
+
+.stat-item:nth-child(2)::after {
+display: none;
+}
+
+.form-row {
+grid-template-columns: 1fr;
+}
+
+.footer-content {
+flex-direction: column;
+gap: 24px;
+text-align: center;
+}
+
+.footer-links {
+flex-wrap: wrap;
+justify-content: center;
+}
+}
+
+@media (max-width: 680px) {
+.container { padding: 0 24px; }
+
+nav { display: none; }
+
+.hamburger { display: flex; }
+
+.header-controls .btn-premium { display: none; }
+
+.brand-logo { height: 90px; }
+
+.hero {
+min-height: auto;
+padding: 120px 0 60px;
+}
+
+.hero h1 { font-size: clamp(36px, 10vw, 56px); }
+
+.hero-desc { font-size: 16px; }
+
+.hero-actions {
+flex-direction: column;
+}
+
+.btn-premium, .btn-outline {
+width: 100%;
+justify-content: center;
+}
+
+.section { padding: 80px 0; }
+
+.services-grid { gap: 20px; }
+
+.service-card { padding: 32px; }
+
+.process-grid { grid-template-columns: 1fr; }
+
+.process-step:nth-child(4),
+.process-step:nth-child(5) {
+display: block;
+}
+
+.stats-bar {
+grid-template-columns: 1fr;
+}
+
+.stat-item::after { display: none; }
+
+.tech-grid { gap: 32px; }
+
+.contact-section { padding: 80px 0; }
+
+.contact-form { padding: 32px; }
+
+.review-card { padding: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ANIMATED BACKGROUND -->
+<div class="bg-animation">
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+</div>
+
+<header>
+<div class="container header-inner">
+<a href="#home" class="brand-logo">
+<img src="axis-logo.png" alt="AXIS">
+</a>
+
+<nav id="main-nav">
+<a href="#services" data-i18n="navServices">Serviços</a>
+<a href="#process" data-i18n="navProcess">Processo</a>
+<a href="#reviews" data-i18n="navReviews">Feedback</a>
+</nav>
+
+<div class="header-controls">
+<button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+<button id="lang-toggle" class="control-btn">EN</button>
+<button class="btn-premium" onclick="scrollToProject('start')" data-i18n="navBtnStart">
+<span>Criar Agora</span>
+<i class="fas fa-arrow-right"></i>
+</button>
+</div>
+</div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+<button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+<a href="#services" data-i18n="navServices">Serviços</a>
+<a href="#process" data-i18n="navProcess">Processo</a>
+<a href="#reviews" data-i18n="navReviews">Feedback</a>
+<a href="#contact" data-i18n="navBtnStart" style="color: var(--accent-primary);">Criar Agora</a>
+</div>
+
+<div class="page-wrapper">
+
+<!-- HERO -->
+<section class="hero" id="home">
+<div class="container">
+<div class="hero-content">
+<div class="hero-badge">
+<span class="hero-badge-dot"></span>
+<span data-i18n="heroBadge">A aceitar novos projetos</span>
+</div>
+<h1 data-i18n="heroTitle">Transformamos ideias em <span>peças reais.</span></h1>
+<p class="hero-desc" data-i18n="heroDesc">
+Precisas de uma peça que não existe? Ou recriar algo que deixou de existir?
+Desenhamos do zero com precisão de engenharia. Tu recebes os ficheiros prontos para produzir.
+</p>
+<div class="hero-actions">
+<button class="btn-premium" onclick="scrollToProject('custom')" data-i18n="heroBtnCreate">
+<span>Criar Peça Nova</span>
+<i class="fas fa-arrow-right"></i>
+</button>
+<button class="btn-outline" onclick="scrollToProject('fix')">
+<i class="fas fa-sync-alt"></i>
+<span data-i18n="heroBtnRecreate">Recriar Peça Existente</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- STATS -->
+<div class="container">
+<div class="stats-bar">
+<div class="stat-item">
+<div class="stat-number">150+</div>
+<div class="stat-label">Peças Desenhadas</div>
+</div>
+<div class="stat-item">
+<div class="stat-number">48h</div>
+<div class="stat-label">Tempo Médio</div>
+</div>
+<div class="stat-item">
+<div class="stat-number">100%</div>
+<div class="stat-label">Ficheiros Validados</div>
+</div>
+<div class="stat-item">
+<div class="stat-number">5.0</div>
+<div class="stat-label">Rating Médio</div>
+</div>
+</div>
+</div>
+
+<!-- SERVICES -->
+<section class="section reveal" id="services">
+<div class="container">
+<div class="section-tag" data-i18n="srvTag">O que fazemos</div>
+<h2 style="font-size: clamp(36px, 5vw, 56px);" data-i18n="srvTitle">Design de peças. Sem limites.</h2>
+<div class="services-grid">
+<div class="service-card reveal-left">
+<div class="service-icon">
+<i class="fas fa-lightbulb"></i>
+</div>
+<span class="section-tag" data-i18n="srv1Tag">Criação</span>
+<h3>AXIS Custom</h3>
+<p data-i18n="srv1Desc">Precisas de uma peça que não existe em lado nenhum? Criamos do zero a partir da tua ideia, foto ou esboço. Entregamos ficheiros CAD prontos para produção, com toda a documentação técnica.</p>
+<div class="service-features">
+<span class="service-feature">Medidas exatas</span>
+<span class="service-feature">Ficheiros STEP/STL</span>
+<span class="service-feature">Documentação</span>
+</div>
+<button class="start-project-btn" onclick="scrollToProject('custom')" data-i18n="srv1Btn">
+<span>Começar projeto</span>
+<i class="fas fa-arrow-right"></i>
+</button>
+</div>
+<div class="service-card reveal-right">
+<div class="service-icon">
+<i class="fas fa-sync-alt"></i>
+</div>
+<span class="section-tag" data-i18n="srv2Tag">Recriação</span>
+<h3>AXIS Fix</h3>
+<p data-i18n="srv2Desc">Peça partida, desgastada ou que já não existe no mercado? Fazemos engenharia reversa completa: medimos, modelamos e reforçamos para que a nova dure mais que a original.</p>
+<div class="service-features">
+<span class="service-feature">Engenharia reversa</span>
+<span class="service-feature">Melhoria de design</span>
+<span class="service-feature">Compatibilidade total</span>
+</div>
+<button class="start-project-btn" onclick="scrollToProject('fix')" data-i18n="srv2Btn">
+<span>Recriar peça</span>
+<i class="fas fa-arrow-right"></i>
+</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PROCESS -->
+<section class="section reveal" id="process">
+<div class="container">
+<div class="section-tag" data-i18n="procTag">Processo</div>
+<h2 style="font-size: clamp(36px, 5vw, 56px);" data-i18n="procTitle">Da ideia ao ficheiro. Passo a passo.</h2>
+<div class="process-grid">
+<div class="process-step reveal">
+<div class="step-number">01</div>
+<h3 data-i18n="proc1Title">Briefing</h3>
+<p data-i18n="proc1Desc">Contas-nos o que precisas. Foto, desenho ou descrição.</p>
+</div>
+<div class="process-step reveal">
+<div class="step-number">02</div>
+<h3 data-i18n="proc2Title">Análise</h3>
+<p data-i18n="proc2Desc">Estudamos o uso, as forças e o espaço disponível.</p>
+</div>
+<div class="process-step reveal">
+<div class="step-number">03</div>
+<h3 data-i18n="proc3Title">Design</h3>
+<p data-i18n="proc3Desc">Modelamos em 3D com precisão milimétrica.</p>
+</div>
+<div class="process-step reveal">
+<div class="step-number">04</div>
+<h3 data-i18n="proc4Title">Validação</h3>
+<p data-i18n="proc4Desc">Revisões até ficar perfeito. Tu aprovas tudo.</p>
+</div>
+<div class="process-step reveal">
+<div class="step-number">05</div>
+<h3 data-i18n="proc5Title">Entrega</h3>
+<p data-i18n="proc5Desc">Recebes ficheiros prontos para produção.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- TECH STACK -->
+<section class="tech-section">
+<div class="container">
+<div class="tech-grid">
+<div class="tech-item">
+<div class="tech-icon"><i class="fas fa-cube"></i></div>
+<span class="tech-name">SolidWorks</span>
+</div>
+<div class="tech-item">
+<div class="tech-icon"><i class="fas fa-vector-square"></i></div>
+<span class="tech-name">Fusion 360</span>
+</div>
+<div class="tech-item">
+<div class="tech-icon"><i class="fas fa-pencil-ruler"></i></div>
+<span class="tech-name" data-i18n="techManual">Desenho Técnico Manual</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ABOUT -->
+<section class="section reveal" id="about">
+<div class="container">
+<div class="about-grid">
+<div class="about-text reveal-left">
+<div class="section-tag" data-i18n="abtTag">Quem somos</div>
+<h2 style="font-size: clamp(36px, 5vw, 56px);" data-i18n="abtTitle">Engenhosidade pura.</h2>
+<p data-i18n="abtP1">A AXIS nasceu de uma frustração comum: precisar de uma peça que simplesmente não existe. Em vez de improvisar com soluções que nunca encaixam bem, decidimos criar a solução certa.</p>
+<p data-i18n="abtP2">Somos engenheiros que desenham peças. Não imprimimos — focamo-nos no que fazemos melhor: design técnico de precisão. Tu recebes ficheiros prontos para produzir onde quiseres.</p>
+</div>
+<div class="about-visual reveal-right">
+<div class="about-card">
+<p class="about-quote" data-i18n="abtQuote">"Cada peça tem um propósito. O nosso trabalho é descobri-lo e desenhá-lo com precisão."</p>
+<div class="about-author">
+<div class="about-avatar">AX</div>
+<div>
+<div class="about-name">Team AXIS</div>
+<div class="about-role">Engenharia & Design</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- REVIEWS -->
+<section class="section reveal" id="reviews">
+<div class="container" style="text-align: center;">
+<div class="section-tag" style="justify-content: center;" data-i18n="revTag">Feedback</div>
+<h2 style="font-size: clamp(36px, 5vw, 56px);" data-i18n="revTitle">O que dizem os nossos clientes.</h2>
+<div class="reviews-container">
+<div class="review-card">
+<div class="review-form-header">
+<div class="stars-input" id="star-rating">
+<i class="fas fa-star star-btn" data-value="1"></i>
+<i class="fas fa-star star-btn" data-value="2"></i>
+<i class="fas fa-star star-btn" data-value="3"></i>
+<i class="fas fa-star star-btn" data-value="4"></i>
+<i class="fas fa-star star-btn" data-value="5"></i>
+</div>
+<input type="hidden" id="star-rating-value" value="0">
+</div>
+<form id="review-form" action="https://formspree.io/f/mgorgaqd" method="POST">
+<textarea class="review-textarea" name="comentario" data-i18n="revPlaceholder" placeholder="Como foi a tua experiência? A peça ficou como esperavas?" rows="4" required></textarea>
+<button type="submit" id="review-submit-btn" class="btn-premium" style="width: 100%;" data-i18n="revBtn">
+<span>Enviar Feedback</span>
+<i class="fas fa-paper-plane"></i>
+</button>
+</form>
+<div class="existing-reviews">
+<div class="review-item">
+<div class="review-header">
+<div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+<div class="review-date">2024.11</div>
+</div>
+<span class="review-project" data-i18n="revCtx1">AXIS Fix — Suporte de motor</span>
+<p class="review-text" data-i18n="revText1">Encaixou perfeitamente. O problema de vibração desapareceu. Montagem direta, sem ajustes.</p>
+</div>
+<div class="review-item">
+<div class="review-header">
+<div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+<div class="review-date">2024.10</div>
+</div>
+<span class="review-project" data-i18n="revCtx2">AXIS Custom — Adaptador</span>
+<p class="review-text" data-i18n="revText2">Engenharia reversa de uma peça que já não existia. Modelo impecável, consegui produzir sem problemas.</p>
+</div>
+<div class="review-item">
+<div class="review-header">
+<div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+<div class="review-date">2024.09</div>
+</div>
+<span class="review-project" data-i18n="revCtx3">AXIS Custom — Design CAD</span>
+<p class="review-text" data-i18n="revText3">Desenho de qualidade e medidas corretas. Enviaram em STEP como pedi — perfeito para abrir noutros programas.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section reveal" id="contact">
+<div class="container">
+<div class="contact-grid">
+<div class="contact-info">
+<div class="section-tag" data-i18n="ctcTag">Contacto</div>
+<h2 data-i18n="ctcTitle">Vamos criar a tua peça.</h2>
+<p data-i18n="ctcDesc">Descreve o que precisas. Respondemos em menos de 24 horas com uma proposta clara.</p>
+<div class="contact-details">
+<div class="contact-detail">
+<div class="contact-detail-icon"><i class="fas fa-envelope"></i></div>
+<span class="contact-detail-text">AXISEngenharia2026@outlook.com</span>
+</div>
+<div class="contact-detail">
+<div class="contact-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+<span class="contact-detail-text">Porto, Portugal</span>
+</div>
+</div>
+</div>
+<div class="contact-form">
+<form id="project-form" action="https://formspree.io/f/mwvagllk" method="POST" enctype="multipart/form-data">
+<div class="form-row">
+<div class="form-group">
+<label data-i18n="formNameLbl">Nome *</label>
+<input type="text" name="nome" class="form-input" data-i18n="formNamePlc" placeholder="O teu nome" required>
+</div>
+<div class="form-group">
+<label data-i18n="formEmailLbl">Email *</label>
+<input type="email" name="email" class="form-input" data-i18n="formEmailPlc" placeholder="Onde contactamos" required>
+</div>
+</div>
+<div class="form-group">
+<label data-i18n="formProjLbl">Projeto / Veículo *</label>
+<input type="text" name="projeto" class="form-input" data-i18n="formProjPlc" placeholder="Marca, modelo ou contexto" required>
+</div>
+<div class="form-group">
+<label data-i18n="formIdeaLbl">O que precisas *</label>
+<textarea name="detalhes" class="form-input form-textarea" data-i18n="formIdeaPlc" placeholder="Descreve a peça, com medidas se possível" required></textarea>
+</div>
+<div class="form-group">
+<label data-i18n="formFilesLbl">Fotos (opcional)</label>
+<input type="file" name="fotos" class="form-input form-file" accept="image/*" multiple>
+<span class="form-file-hint" data-i18n="formFilesHint">Podes anexar uma ou mais fotos da peça.</span>
+</div>
+<button type="submit" id="submit-btn" class="btn-premium" style="width: 100%;" data-i18n="formBtn">
+<span>Enviar Pedido</span>
+<i class="fas fa-arrow-right"></i>
+</button>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<div class="container">
+<div class="footer-content">
+<div class="footer-brand">
+<a href="#home" class="brand-logo">
+<img src="axis-logo.png" alt="AXIS">
+</a>
+<span class="footer-text">Design de peças com precisão de engenharia.</span>
+</div>
+<div class="footer-links">
+<a href="#services" data-i18n="navServices">Serviços</a>
+<a href="#process" data-i18n="navProcess">Processo</a>
+<a href="#contact" data-i18n="navBtnStart">Contacto</a>
+</div>
+</div>
+</div>
+</footer>
+
+</div>
+
+<script>
+// Translations
+const dict = {
+pt: {
+navServices: "Serviços", navProcess: "Processo", navReviews: "Feedback", navBtnStart: "Criar Agora",
+heroBadge: "A aceitar novos projetos", heroTitle: "Transformamos ideias em <span>peças reais.</span>",
+heroDesc: "Precisas de uma peça que não existe? Ou recriar algo que deixou de existir? Desenhamos do zero com precisão de engenharia. Tu recebes os ficheiros prontos para produzir.",
+heroBtnCreate: "Criar Peça Nova", heroBtnRecreate: "Recriar Peça Existente",
+srvTag: "O que fazemos", srvTitle: "Design de peças. Sem limites.",
+srv1Tag: "Criação", srv1Desc: "Precisas de uma peça que não existe em lado nenhum? Criamos do zero a partir da tua ideia, foto ou esboço. Entregamos ficheiros CAD prontos para produção, com toda a documentação técnica.",
+srv1Btn: "Começar projeto", srv2Tag: "Recriação",
+srv2Desc: "Peça partida, desgastada ou que já não existe no mercado? Fazemos engenharia reversa completa: medimos, modelamos e reforçamos para que a nova dure mais que a original.",
+srv2Btn: "Recriar peça",
+procTag: "Processo", procTitle: "Da ideia ao ficheiro. Passo a passo.",
+proc1Title: "Briefing", proc1Desc: "Contas-nos o que precisas. Foto, desenho ou descrição.",
+proc2Title: "Análise", proc2Desc: "Estudamos o uso, as forças e o espaço disponível.",
+proc3Title: "Design", proc3Desc: "Modelamos em 3D com precisão milimétrica.",
+proc4Title: "Validação", proc4Desc: "Revisões até ficar perfeito. Tu aprovas tudo.",
+proc5Title: "Entrega", proc5Desc: "Recebes ficheiros prontos para produção.",
+abtTag: "Quem somos", abtTitle: "Engenhosidade pura.",
+abtP1: "A AXIS nasceu de uma frustração comum: precisar de uma peça que simplesmente não existe. Em vez de improvisar com soluções que nunca encaixam bem, decidimos criar a solução certa.",
+abtP2: "Somos engenheiros que desenham peças. Não imprimimos — focamo-nos no que fazemos melhor: design técnico de precisão. Tu recebes ficheiros prontos para produzir onde quiseres.",
+abtQuote: '"Cada peça tem um propósito. O nosso trabalho é descobri-lo e desenhá-lo com precisão."',
+revTag: "Feedback", revTitle: "O que dizem os nossos clientes.",
+revPlaceholder: "Como foi a tua experiência? A peça ficou como esperavas?", revBtn: "Enviar Feedback",
+revCtx1: "AXIS Fix — Suporte de motor", revText1: "Encaixou perfeitamente. O problema de vibração desapareceu. Montagem direta, sem ajustes.",
+revCtx2: "AXIS Custom — Adaptador", revText2: "Engenharia reversa de uma peça que já não existia. Modelo impecável, consegui produzir sem problemas.",
+revCtx3: "AXIS Custom — Design CAD", revText3: "Desenho de qualidade e medidas corretas. Enviaram em STEP como pedi — perfeito para abrir noutros programas.",
+ctcTag: "Contacto", ctcTitle: "Vamos criar a tua peça.", ctcDesc: "Descreve o que precisas. Respondemos em menos de 24 horas com uma proposta clara.",
+formNameLbl: "Nome *", formNamePlc: "O teu nome", formEmailLbl: "Email *", formEmailPlc: "Onde contactamos",
+formProjLbl: "Projeto / Veículo *", formProjPlc: "Marca, modelo ou contexto",
+formIdeaLbl: "O que precisas *", formIdeaPlc: "Descreve a peça, com medidas se possível", formBtn: "Enviar Pedido",
+formFilesLbl: "Fotos (opcional)", formFilesHint: "Podes anexar uma ou mais fotos da peça.",
+ctxStart: "Projeto Novo", ctxCustom: "AXIS Custom", ctxFix: "AXIS Fix",
+techManual: "Desenho Técnico Manual"
+},
+en: {
+navServices: "Services", navProcess: "Process", navReviews: "Feedback", navBtnStart: "Create Now",
+heroBadge: "Accepting new projects", heroTitle: "We turn ideas into <span>real parts.</span>",
+heroDesc: "Need a part that doesn't exist? Or recreate something that's no longer available? We design from scratch with engineering precision. You get files ready to produce.",
+heroBtnCreate: "Create New Part", heroBtnRecreate: "Recreate Existing Part",
+srvTag: "What we do", srvTitle: "Part design. No limits.",
+srv1Tag: "Creation", srv1Desc: "Need a part that doesn't exist anywhere? We create from scratch based on your idea, photo or sketch. We deliver CAD files ready for production, with all technical documentation.",
+srv1Btn: "Start project", srv2Tag: "Recreation",
+srv2Desc: "Broken, worn out part or no longer on the market? We do complete reverse engineering: measure, model and reinforce so the new one lasts longer than the original.",
+srv2Btn: "Recreate part",
+procTag: "Process", procTitle: "From idea to file. Step by step.",
+proc1Title: "Briefing", proc1Desc: "Tell us what you need. Photo, sketch or description.",
+proc2Title: "Analysis", proc2Desc: "We study usage, forces and available space.",
+proc3Title: "Design", proc3Desc: "We model in 3D with millimeter precision.",
+proc4Title: "Validation", proc4Desc: "Revisions until perfect. You approve everything.",
+proc5Title: "Delivery", proc5Desc: "You receive production-ready files.",
+abtTag: "Who we are", abtTitle: "Pure engineering.",
+abtP1: "AXIS was born from a common frustration: needing a part that simply doesn't exist. Instead of improvising with solutions that never fit well, we decided to create the right solution.",
+abtP2: "We are engineers who design parts. We don't print — we focus on what we do best: precision technical design. You receive files ready to produce wherever you want.",
+abtQuote: '"Every part has a purpose. Our job is to discover it and design it with precision."',
+revTag: "Feedback", revTitle: "What our clients say.",
+revPlaceholder: "How was your experience? Did the part meet expectations?", revBtn: "Send Feedback",
+revCtx1: "AXIS Fix — Motor mount", revText1: "Fitted perfectly. Vibration problem disappeared. Direct assembly, no adjustments.",
+revCtx2: "AXIS Custom — Adapter", revText2: "Reverse engineering of a part that no longer existed. Impeccable model, produced without issues.",
+revCtx3: "AXIS Custom — CAD Design", revText3: "Quality design and correct measurements. Sent in STEP as requested — perfect for other software.",
+ctcTag: "Contact", ctcTitle: "Let's create your part.", ctcDesc: "Describe what you need. We respond within 24 hours with a clear proposal.",
+formNameLbl: "Name *", formNamePlc: "Your name", formEmailLbl: "Email *", formEmailPlc: "Where to contact",
+formProjLbl: "Project / Vehicle *", formProjPlc: "Brand, model or context",
+formIdeaLbl: "What you need *", formIdeaPlc: "Describe the part, with measurements if possible", formBtn: "Send Request",
+formFilesLbl: "Photos (optional)", formFilesHint: "You can attach one or more photos of the part.",
+ctxStart: "New Project", ctxCustom: "AXIS Custom", ctxFix: "AXIS Fix",
+techManual: "Manual Technical Drawing"
+}
+};
+
+let currentLang = 'pt';
+
+// Language Toggle
+const langToggle = document.getElementById('lang-toggle');
+
+function updateContent() {
+document.querySelectorAll('[data-i18n]').forEach(el => {
+const key = el.getAttribute('data-i18n');
+if (dict[currentLang][key]) el.innerHTML = dict[currentLang][key];
+});
+document.querySelectorAll('[data-i18n]').forEach(el => {
+const placeholder = el.getAttribute('data-i18n');
+if (el.classList.contains('form-input') && dict[currentLang][placeholder + 'Plc']) {
+el.setAttribute('placeholder', dict[currentLang][placeholder + 'Plc']);
+}
+});
+}
+
+langToggle.addEventListener('click', () => {
+currentLang = currentLang === 'pt' ? 'en' : 'pt';
+langToggle.innerText = currentLang === 'pt' ? 'EN' : 'PT';
+updateContent();
+});
+
+// Mobile Menu
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+hamburgerBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+mobileMenuClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+mobileMenu.querySelectorAll('a').forEach(link => {
+link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+});
+
+// Scroll Reveal
+const revealObserver = new IntersectionObserver(entries => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('active');
+}
+});
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+revealObserver.observe(el);
+});
+
+// Header scroll effect
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+const header = document.querySelector('header');
+const currentScroll = window.pageYOffset;
+
+if (currentScroll > 100) {
+header.classList.add('scrolled');
+} else {
+header.classList.remove('scrolled');
+}
+
+lastScroll = currentScroll;
+});
+
+// Star Rating
+document.querySelectorAll('.star-btn').forEach(star => {
+star.addEventListener('click', () => {
+const val = parseInt(star.getAttribute('data-value'));
+document.querySelectorAll('.star-btn').forEach(s => {
+s.classList.remove('active');
+if (parseInt(s.getAttribute('data-value')) <= val) {
+s.classList.add('active');
+}
+});
+document.getElementById('star-rating-value').value = val;
+});
+});
+
+// Scroll to Contact
+function scrollToProject(context) {
+const contact = document.getElementById('contact');
+const details = document.querySelector('textarea[name="detalhes"]');
+const map = { start: 'ctxStart', custom: 'ctxCustom', fix: 'ctxFix' };
+
+details.value = `[${dict[currentLang][map[context]]}] `;
+contact.scrollIntoView({ behavior: 'smooth' });
+
+setTimeout(() => {
+details.focus();
+const val = details.value;
+details.value = '';
+details.value = val;
+}, 800);
+}
+
+// Form Handlers
+async function handleForm(formId, btnId, successMsg) {
+const form = document.getElementById(formId);
+if (!form) return;
+
+const btn = document.getElementById(btnId);
+const origText = btn.innerHTML;
+
+form.addEventListener('submit', async (e) => {
+e.preventDefault();
+btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A enviar...';
+btn.disabled = true;
+btn.style.opacity = '0.7';
+
+try {
+const response = await fetch(form.action, {
+method: 'POST',
+body: new FormData(form),
+headers: { 'Accept': 'application/json' }
+});
+
+if (response.ok) {
+btn.innerHTML = '<i class="fas fa-check"></i> ' + successMsg;
+btn.style.background = '#10b981';
+form.reset();
+
+if (formId === 'review-form') {
+document.getElementById('star-rating-value').value = '0';
+document.querySelectorAll('.star-btn').forEach(s => s.classList.remove('active'));
+}
+
+setTimeout(() => {
+btn.innerHTML = origText;
+btn.style.background = '';
+btn.disabled = false;
+btn.style.opacity = '1';
+}, 4000);
+} else {
+throw new Error('Error');
+}
+} catch (err) {
+btn.innerHTML = '<i class="fas fa-times"></i> Erro. Tenta novamente.';
+btn.style.background = '#ef4444';
+setTimeout(() => {
+btn.innerHTML = origText;
+btn.style.background = '';
+btn.disabled = false;
+btn.style.opacity = '1';
+}, 3000);
+}
+});
+}
+
+handleForm('review-form', 'review-submit-btn', 'Enviado!');
+handleForm('project-form', 'submit-btn', 'Enviado!');
+
+// Initialize
+updateContent();
+</script>
+</body>
+</html>
