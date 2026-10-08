@@ -21,7 +21,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23003d99'/%3E%3Cstop offset='100%25' stop-color='%2333aaff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='26' y='2' width='12' height='60' rx='6' transform='rotate(45 32 32)' fill='url(%23a)'/%3E%3Crect x='26' y='2' width='12' height='60' rx='6' transform='rotate(-45 32 32)' fill='url(%23a)'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<!-- GOOGLE ANALYTICS: só é carregado depois de o visitante aceitar cookies -->
+<!-- GOOGLE ANALYTICS + MICROSOFT CLARITY: só são carregados depois de o visitante aceitar cookies -->
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -34,6 +34,12 @@ s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XKXJXV0785';
 document.head.appendChild(s);
 gtag('js', new Date());
 gtag('config', 'G-XKXJXV0785', { anonymize_ip: true });
+// Microsoft Clarity (mapas de calor e cliques). Troca o texto abaixo pelo ID do teu projeto Clarity.
+var AXIS_CLARITY_ID = 'COLOCA_AQUI_O_ID_DO_CLARITY';
+if (AXIS_CLARITY_ID.indexOf('COLOCA') !== 0) {
+(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", AXIS_CLARITY_ID);
+window.clarity('consent');
+}
 }
 try { if (localStorage.getItem('axis-consent') === 'accepted') axisLoadAnalytics(); } catch (e) {}
 </script>
@@ -2534,7 +2540,7 @@ color: var(--text-dim);
 
 
 <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookies">
-<p data-i18n="cookieText">Este site usa cookies de análise (Google Analytics) para perceber como é usado. Só são ativados se aceitares. Sabe mais na <a href="#privacidade" class="open-privacy">política de privacidade</a>.</p>
+<p data-i18n="cookieText">Este site usa cookies de análise (Google Analytics e Microsoft Clarity) para perceber como é usado. Só são ativados se aceitares. Sabe mais na <a href="#privacidade" class="open-privacy">política de privacidade</a>.</p>
 <div class="cookie-actions">
 <button type="button" id="cookie-reject" data-i18n="cookieReject">Recusar</button>
 <button type="button" id="cookie-accept" data-i18n="cookieAccept">Aceitar</button>
@@ -2550,7 +2556,7 @@ color: var(--text-dim);
 <button type="button" class="privacy-close" id="privacy-close" aria-label="Fechar"><i class="fas fa-times"></i></button>
 <div class="privacy-inner only-pt">
 <h2 id="privacy-title">Política de privacidade</h2>
-<p class="privacy-updated">Última atualização: setembro de 2026</p>
+<p class="privacy-updated">Última atualização: outubro de 2026</p>
 <h3>Quem é responsável pelos teus dados</h3>
 <p>O responsável pelo tratamento dos dados recolhidos neste site é a AXIS Engenharia Digital (Porto, Portugal), projeto individual de um estudante de Engenharia Mecânica. Para qualquer questão sobre privacidade, escreve para <a href="mailto:AXISEngenharia2026@outlook.com">AXISEngenharia2026@outlook.com</a>.</p>
 <h3>Que dados são recolhidos</h3>
@@ -2559,21 +2565,22 @@ color: var(--text-dim);
 <li>Feedback: o comentário e a avaliação que enviares.</li>
 <li>Contactos por email ou WhatsApp: os dados que partilhares nessas conversas.</li>
 <li>Estatísticas de visita (Google Analytics): páginas vistas, tipo de dispositivo e origem aproximada, apenas se aceitares os cookies de análise.</li>
+<li>Utilização do site (Microsoft Clarity): cliques, deslocamento na página e tempo de visita, de forma agregada e sem guardar o que escreves nos formulários, apenas se aceitares os cookies de análise.</li>
 </ul>
 <h3>Para que são usados</h3>
 <p>Para responder ao teu pedido, preparar orçamentos e executar os projetos que confias à AXIS, com base nas diligências pré-contratuais e na execução do contrato. As estatísticas de visita servem apenas para melhorar o site e dependem do teu consentimento, que podes retirar a qualquer momento.</p>
 <h3>Com quem são partilhados</h3>
-<p>A AXIS nunca vende dados. Usa serviços de terceiros que os tratam por sua conta: Formspree (envio dos formulários), GitHub (alojamento do site) e Google (estatísticas, só com consentimento). Alguns destes serviços podem tratar dados fora da União Europeia, ao abrigo das garantias previstas no RGPD.</p>
+<p>A AXIS nunca vende dados. Usa serviços de terceiros que os tratam por sua conta: Formspree (envio dos formulários), GitHub (alojamento do site), Google e Microsoft (estatísticas, só com consentimento). Alguns destes serviços podem tratar dados fora da União Europeia, ao abrigo das garantias previstas no RGPD.</p>
 <h3>Durante quanto tempo</h3>
 <p>Os pedidos que não avançam são apagados ao fim de 12 meses. Os dados de projetos realizados são guardados pelo tempo necessário ao projeto e pelos prazos exigidos pela lei, nomeadamente fiscal.</p>
 <h3>Os teus direitos</h3>
 <p>Podes pedir acesso, retificação, apagamento, limitação ou portabilidade dos teus dados, opor-te ao tratamento e retirar o consentimento, através do email acima. Tens ainda o direito de apresentar reclamação à Comissão Nacional de Proteção de Dados (<a href="https://www.cnpd.pt" target="_blank" rel="noopener">cnpd.pt</a>).</p>
 <h3>Cookies</h3>
-<p>O site só usa cookies de análise do Google Analytics, e apenas depois de aceitares. Podes mudar a tua escolha em "Preferências de cookies", no rodapé.</p>
+<p>O site só usa cookies de análise do Google Analytics e do Microsoft Clarity, e apenas depois de aceitares. Podes mudar a tua escolha em "Preferências de cookies", no rodapé.</p>
 </div>
 <div class="privacy-inner only-en">
 <h2>Privacy policy</h2>
-<p class="privacy-updated">Last updated: September 2026</p>
+<p class="privacy-updated">Last updated: October 2026</p>
 <h3>Who is responsible for your data</h3>
 <p>The controller of the data collected on this site is AXIS Engenharia Digital (Porto, Portugal), the individual project of a Mechanical Engineering student. For any privacy question, write to <a href="mailto:AXISEngenharia2026@outlook.com">AXISEngenharia2026@outlook.com</a>.</p>
 <h3>What is collected</h3>
@@ -2582,17 +2589,18 @@ color: var(--text-dim);
 <li>Feedback: the comment and rating you send.</li>
 <li>Email or WhatsApp contacts: the information you share in those conversations.</li>
 <li>Visit statistics (Google Analytics): pages viewed, device type and approximate origin, only if you accept analytics cookies.</li>
+<li>Site usage (Microsoft Clarity): clicks, scrolling and time on page, in aggregate and without storing what you type in forms, only if you accept analytics cookies.</li>
 </ul>
 <h3>How it is used</h3>
 <p>To answer your request, prepare quotes and carry out the projects you entrust to AXIS, on the basis of pre-contractual steps and performance of a contract. Visit statistics are used only to improve the site and depend on your consent, which you can withdraw at any time.</p>
 <h3>Who it is shared with</h3>
-<p>AXIS never sells data. It uses third-party services that process it on its behalf: Formspree (form delivery), GitHub (site hosting) and Google (statistics, only with consent). Some of these services may process data outside the European Union under the safeguards provided by the GDPR.</p>
+<p>AXIS never sells data. It uses third-party services that process it on its behalf: Formspree (form delivery), GitHub (site hosting), Google and Microsoft (statistics, only with consent). Some of these services may process data outside the European Union under the safeguards provided by the GDPR.</p>
 <h3>How long it is kept</h3>
 <p>Requests that don't go ahead are deleted after 12 months. Data from completed projects is kept for as long as the project requires and for the periods required by law, including tax law.</p>
 <h3>Your rights</h3>
 <p>You can request access, rectification, erasure, restriction or portability of your data, object to processing and withdraw consent, using the email above. You also have the right to lodge a complaint with the Portuguese data protection authority (<a href="https://www.cnpd.pt" target="_blank" rel="noopener">cnpd.pt</a>).</p>
 <h3>Cookies</h3>
-<p>The site only uses Google Analytics cookies, and only after you accept them. You can change your choice under "Cookie preferences" in the footer.</p>
+<p>The site only uses Google Analytics and Microsoft Clarity cookies, and only after you accept them. You can change your choice under "Cookie preferences" in the footer.</p>
 </div>
 </dialog>
 
@@ -2682,7 +2690,7 @@ heroCaption: "Desenho de conjunto de uma biela de motor, feito à mão por mim (
 navFaq: "Perguntas",
 footerPrivacy: "Política de privacidade",
 footerCookies: "Preferências de cookies",
-cookieText: "Este site usa cookies de análise (Google Analytics) para perceber como é usado. Só são ativados se aceitares. Sabe mais na <a href=\"#privacidade\" class=\"open-privacy\">política de privacidade</a>.",
+cookieText: "Este site usa cookies de análise (Google Analytics e Microsoft Clarity) para perceber como é usado. Só são ativados se aceitares. Sabe mais na <a href=\"#privacidade\" class=\"open-privacy\">política de privacidade</a>.",
 cookieReject: "Recusar",
 cookieAccept: "Aceitar",
 formConsent: "Ao enviar, aceitas que use estes dados para responder ao teu pedido, como descrito na <a href=\"#privacidade\" class=\"open-privacy\">política de privacidade</a>.",
@@ -2801,7 +2809,7 @@ heroCaption: "Assembly drawing of an engine connecting rod, drawn by hand by me 
 navFaq: "FAQ",
 footerPrivacy: "Privacy policy",
 footerCookies: "Cookie preferences",
-cookieText: "This site uses analytics cookies (Google Analytics) to understand how it is used. They are only enabled if you accept. Learn more in the <a href=\"#privacidade\" class=\"open-privacy\">privacy policy</a>.",
+cookieText: "This site uses analytics cookies (Google Analytics and Microsoft Clarity) to understand how it is used. They are only enabled if you accept. Learn more in the <a href=\"#privacidade\" class=\"open-privacy\">privacy policy</a>.",
 cookieReject: "Decline",
 cookieAccept: "Accept",
 formConsent: "By sending, you agree that I use this data to answer your request, as described in the <a href=\"#privacidade\" class=\"open-privacy\">privacy policy</a>.",
@@ -3017,7 +3025,7 @@ const host = location.hostname;
 const domains = ['', host, '.' + host, '.' + host.split('.').slice(-2).join('.')];
 document.cookie.split(';').forEach(c => {
 const name = c.split('=')[0].trim();
-if (name.startsWith('_ga') || name.startsWith('_gid')) {
+if (name.startsWith('_ga') || name.startsWith('_gid') || name.startsWith('_clck') || name.startsWith('_clsk')) {
 domains.forEach(d => { document.cookie = name + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : ''); });
 }
 });
