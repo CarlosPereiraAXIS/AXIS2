@@ -1,0 +1,114 @@
+/* Páginas legais da AXIS: mesmo aspeto do site principal, sem animações nem serviços de terceiros */
+:root {
+--bg-main: #0a0a0f;
+--bg-panel: #12121a;
+--border-subtle: rgba(255, 255, 255, 0.12);
+--text-main: #ffffff;
+--text-muted: #b4b4c6;
+--text-dim: #9090a6;
+--accent: #5cc0ff;
+--btn-gradient: linear-gradient(135deg, #1f5fd1 0%, #2563eb 100%);
+--font-display: 'Space Grotesk', sans-serif;
+--font-body: 'Inter', -apple-system, system-ui, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+background: var(--bg-main);
+color: var(--text-main);
+font-family: var(--font-body);
+line-height: 1.7;
+}
+body::before {
+content: "";
+position: fixed;
+inset: 0;
+background-image:
+linear-gradient(rgba(92, 192, 255, 0.05) 1px, transparent 1px),
+linear-gradient(90deg, rgba(92, 192, 255, 0.05) 1px, transparent 1px);
+background-size: 100px 100px;
+z-index: -1;
+pointer-events: none;
+}
+html:not([lang="en"]) .only-en, html[lang="en"] .only-pt { display: none; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.skip-link { position: absolute; left: 16px; top: -100px; z-index: 100; background: var(--bg-panel); color: var(--text-main); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--accent); }
+.skip-link:focus { top: 16px; }
+
+.legal-header {
+border-bottom: 1px solid var(--border-subtle);
+background: rgba(10, 10, 15, 0.92);
+position: sticky;
+top: 0;
+z-index: 10;
+}
+.legal-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
+.legal-header img { height: 56px; width: auto; display: block; }
+.legal-header-actions { display: flex; gap: 10px; align-items: center; }
+.btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+min-height: 44px;
+padding: 10px 16px;
+border-radius: 10px;
+border: 1px solid var(--border-subtle);
+background: transparent;
+color: var(--text-main);
+font: 600 14px var(--font-body);
+text-decoration: none;
+cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); }
+.btn-primary { background: var(--btn-gradient); border-color: transparent; color: #fff; }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+main { padding: 48px 0 72px; }
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.2; }
+h1 { font-size: clamp(30px, 6vw, 44px); margin-bottom: 8px; }
+h2 { font-size: 22px; margin: 40px 0 12px; scroll-margin-top: 90px; }
+h3 { font-size: 17px; margin: 24px 0 8px; }
+p, li, td, th { color: var(--text-muted); font-size: 16px; }
+p + p { margin-top: 12px; }
+ul, ol { padding-left: 22px; margin: 8px 0; }
+li + li { margin-top: 6px; }
+strong { color: var(--text-main); }
+.updated { color: var(--text-dim); font-size: 14px; margin-bottom: 24px; }
+.summary {
+border: 1px solid rgba(92, 192, 255, 0.35);
+background: rgba(31, 95, 209, 0.10);
+border-radius: 12px;
+padding: 18px 20px;
+margin: 24px 0;
+}
+.summary p, .summary li { color: var(--text-main); }
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+table { width: 100%; border-collapse: collapse; min-width: 560px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--border-subtle); font-size: 15px; }
+th { color: var(--text-main); font-weight: 600; }
+code { font-size: 14px; color: var(--text-main); }
+.model-form {
+border: 1px dashed var(--border-subtle);
+border-radius: 12px;
+padding: 18px 20px;
+margin-top: 12px;
+}
+.toc { margin: 16px 0 8px; }
+.toc a { color: var(--text-muted); }
+.toc a:hover { color: var(--accent); }
+/* Campos que o Carlos tem de preencher antes de publicar */
+.todo { background: #fbbf24; color: #111; padding: 0 4px; border-radius: 3px; font-weight: 600; }
+.cookie-choice { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+.cookie-status { color: var(--text-main); font-weight: 600; }
+
+.legal-footer { border-top: 1px solid var(--border-subtle); padding: 28px 0 40px; }
+.legal-footer nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.legal-footer a { color: var(--text-muted); font-size: 14px; }
+.legal-footer a:hover { color: var(--accent); }
+.legal-footer p { font-size: 13px; color: var(--text-dim); margin-top: 14px; }
+@media (max-width: 560px) {
+.legal-header img { height: 44px; }
+.btn { padding: 8px 12px; font-size: 13px; }
+}
