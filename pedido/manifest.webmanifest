@@ -1,0 +1,15 @@
+{
+  "name": "AXIS — Pedir orçamento",
+  "short_name": "AXIS",
+  "description": "Pede um orçamento à AXIS para modelar uma peça do teu carro.",
+  "lang": "pt-PT",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
